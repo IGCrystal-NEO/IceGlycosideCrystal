@@ -6,13 +6,12 @@ from the new package modules. Users can continue running `python IGCrystal.py`
 for the demo CLI, or import `igcrystal` as a package.
 """
 from __future__ import annotations
+
 import logging
-import sys
 import signal
-from igcrystal import (
-    Crystal,
-    create_diamond_structure,
-)
+import sys
+
+from igcrystal import Crystal, create_diamond_structure
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
