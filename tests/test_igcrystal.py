@@ -1,13 +1,11 @@
-import os
 import json
+import os
 import tempfile
 import unittest
+
 import numpy as np
 
-from igcrystal import (
-    Crystal,
-    create_diamond_structure,
-)
+from igcrystal import Crystal, create_diamond_structure
 
 
 class TestIGCrystal(unittest.TestCase):

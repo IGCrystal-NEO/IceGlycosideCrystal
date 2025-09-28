@@ -1,6 +1,8 @@
 """Utility helpers for igcrystal."""
 from __future__ import annotations
+
 from typing import Dict
+
 from .constants import ELEMENT_MASSES
 
 

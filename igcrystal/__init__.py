@@ -12,9 +12,9 @@ Public API re-exports the most commonly used classes and helpers for convenience
 
 This package is refactored from the original single-file IGCrystal.py into decoupled modules.
 """
-from .core import Crystal, Atom
-from .factories import create_simple_cubic, create_diamond_structure
-from .constants import ELEMENT_MASSES, AVOGADRO, DEFAULT_MAX_ATOMS
+from .constants import AVOGADRO, DEFAULT_MAX_ATOMS, ELEMENT_MASSES
+from .core import Atom, Crystal
+from .factories import create_diamond_structure, create_simple_cubic
 from .utils import extend_element_masses
 
 __all__ = [

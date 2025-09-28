@@ -1,5 +1,6 @@
 """Constants and default data for igcrystal."""
 from __future__ import annotations
+
 from typing import Dict
 
 # Physical constants

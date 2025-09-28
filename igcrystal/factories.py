@@ -1,5 +1,6 @@
 """Factory helpers to create common crystal prototypes."""
 from __future__ import annotations
+
 from .core import Crystal
 
 
