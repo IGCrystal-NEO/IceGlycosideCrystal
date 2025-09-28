@@ -1,0 +1,21 @@
+[project]
+name = "iceglycosidecrystal"
+version = "0.1.0"
+description = "Lightweight crystal structure analysis & manipulation toolkit"
+requires-python = ">=3.8"
+
+[tool.ruff]
+line-length = 100
+target-version = "py38"
+select = ["E", "F", "I"]
+ignore = []
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
+warn_unused_configs = true
+warn_redundant_casts = true
+warn_unused_ignores = true
+warn_return_any = true
+no_implicit_optional = true
+strict_equality = true
