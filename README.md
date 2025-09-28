@@ -179,13 +179,13 @@ Current `to_dict()` output (example):
 * To support more elements and isotopic precision, expand `ELEMENT_MASSES` or depend on packages like `mendeleev` / `periodictable`.
 * For neighbor/bond detection on large systems, install `scipy` and use `cKDTree` for significant performance gains.
 
----
+
 
 ## Testing
 
 * Add `pytest` unit tests (recommended): volume, density, coordinate inverses, supercell counts, JSON compatibility, etc.
 
----
+
 ### Project Layout (after refactor)
 
 ```

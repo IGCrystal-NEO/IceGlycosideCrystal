@@ -58,6 +58,9 @@ class Crystal:
             self.mass_table = { _normalize_element_symbol(k): float(v) for k,v in mass_table.items() }
         else:
             self.mass_table = None
+        # Internal caches for lattice matrices
+        self._mat_cache: Optional[np.ndarray] = None
+        self._dirty_lattice: bool = True
 
     # -------------------------
     # Basic setters / validation
@@ -73,6 +76,9 @@ class Crystal:
             "a": float(a), "b": float(b), "c": float(c),
             "alpha": float(alpha), "beta": float(beta), "gamma": float(gamma)
         }
+        # mark cache dirty
+        self._dirty_lattice = True
+        self._mat_cache = None
 
     def add_atom(self, element: str, x: float, y: float, z: float, occupancy: float = 1.0) -> None:
         """Add an atom with fractional coordinates. occupancy in [0,1]."""
@@ -91,7 +97,10 @@ class Crystal:
          - alpha is angle between b and c
          - beta is angle between a and c
          - gamma is angle between a and b
+        Caches the result until lattice parameters change.
         """
+        if (self._mat_cache is not None) and (not self._dirty_lattice):
+            return self._mat_cache
         a = self.lattice_parameters["a"]
         b = self.lattice_parameters["b"]
         c = self.lattice_parameters["c"]
@@ -117,8 +126,9 @@ class Crystal:
         c_z_sq = max(c_z_sq, 0.0)
         c_z = c * math.sqrt(c_z_sq)
         c_vec = np.array([c_x, c_y, c_z])
-
         mat = np.column_stack((a_vec, b_vec, c_vec))
+        self._mat_cache = mat
+        self._dirty_lattice = False
         return mat
 
     # -------------------------
@@ -254,13 +264,14 @@ class Crystal:
         import matplotlib.pyplot as plt
         from mpl_toolkits.mplot3d import Axes3D  # noqa: F401
 
-        cart_coords = []
-        elements = []
-        for atom in self.atoms:
-            cart = self.fractional_to_cartesian((atom.x, atom.y, atom.z))
-            cart_coords.append(cart)
-            elements.append(atom.element)
-        cart_coords = np.array(cart_coords) if cart_coords else np.zeros((0, 3))
+        # Vectorized fractional -> cartesian for speed
+        elements = [atom.element for atom in self.atoms]
+        if self.atoms:
+            fracs = np.array([[a.x, a.y, a.z] for a in self.atoms], dtype=float)
+            mat = self._lattice_vectors()
+            cart_coords = fracs @ mat.T
+        else:
+            cart_coords = np.zeros((0, 3))
 
         created_fig = False
         if ax is None:
@@ -343,7 +354,6 @@ class Crystal:
                 ax.plot([p0[0], p1[0]], [p0[1], p1[1]], [p0[2], p1[2]], linestyle='--', linewidth=0.8)
 
         ax.legend()
-        import matplotlib.pyplot as plt
         plt.tight_layout()
         if save_as:
             plt.savefig(save_as)
@@ -365,6 +375,9 @@ class Crystal:
             "atoms": [atom.to_list() for atom in self.atoms],
             "format_version": 1
         }
+
+    def __repr__(self) -> str:
+        return f"Crystal(name={self.name!r}, atoms={len(self.atoms)}, sg={self.space_group!r})"
 
     def save_to_file(self, filename: str, verbose: bool = True) -> str:
         """Save structure to JSON. Returns filename."""
