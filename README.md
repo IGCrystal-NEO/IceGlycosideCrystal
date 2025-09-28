@@ -2,7 +2,7 @@
 
 **Lightweight and Robust Crystal Structure Analysis & Manipulation Toolkit (Python)** — for representing unit cells, coordinate transformations, volume/density calculations, supercell generation, visualization, and simple I/O.
 
----
+
 
 ## Key Features
 
@@ -13,7 +13,7 @@
 * JSON serialization/deserialization (backward compatible with old atom format `[el, x, y, z]` and new format `[el, x, y, z, occupancy]`).
 * Automatic normalization of element symbols (case-tolerant) and support for extending element mass tables either per-instance or globally.
 
----
+
 
 ## Requirements
 
@@ -29,7 +29,7 @@ pip install numpy matplotlib
 pip install scipy
 ```
 
----
+
 
 ## Quick Start
 
@@ -64,7 +64,7 @@ diamond.save_to_file("diamond_example.json")
 loaded = Crystal.load_from_file("diamond_example.json")
 ```
 
----
+
 
 ## Main API (Summary)
 
@@ -119,7 +119,7 @@ loaded = Crystal.load_from_file("diamond_example.json")
 
 * `extend_element_masses(mapping: Dict[str, float], override: bool = True)` — extend/override module-level `ELEMENT_MASSES`.
 
----
+
 
 ## JSON Format Example
 
@@ -139,7 +139,7 @@ Current `to_dict()` output (example):
 }
 ```
 
----
+
 
 ## Troubleshooting & Common Issues
 
@@ -163,7 +163,7 @@ Current `to_dict()` output (example):
 
   * Use `plot_structure(save_as="out.png", show=False)` to save without displaying, or set matplotlib backend to `Agg` in the environment.
 
----
+
 
 ## Advanced Suggestions
 
@@ -173,7 +173,7 @@ Current `to_dict()` output (example):
 
 ---
 
-## Testing & Contributions
+## Testing
 
 * Add `pytest` unit tests (recommended): volume, density, coordinate inverses, supercell counts, JSON compatibility, etc.
 
