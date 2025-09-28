@@ -2,6 +2,8 @@
 
 **Lightweight and Robust Crystal Structure Analysis & Manipulation Toolkit (Python)** — for representing unit cells, coordinate transformations, volume/density calculations, supercell generation, visualization, and simple I/O.
 
+Note: The codebase has been refactored from a single-file script into a small, decoupled package at `igcrystal/`, while keeping `IGCrystal.py` as a backward-compatible CLI/demo wrapper.
+
 
 
 ## Key Features
@@ -33,7 +35,7 @@ pip install scipy
 
 ## Quick Start
 
-Save `igcrystal.py` and use in Python:
+Use the package directly in Python:
 
 ```python
 from igcrystal import create_diamond_structure, Crystal
@@ -62,6 +64,12 @@ diamond.plot_structure(save_as="diamond.png", show=False)
 # save / load
 diamond.save_to_file("diamond_example.json")
 loaded = Crystal.load_from_file("diamond_example.json")
+```
+
+Or run the legacy wrapper (same demo output):
+
+```bash
+python IGCrystal.py
 ```
 
 
@@ -178,3 +186,16 @@ Current `to_dict()` output (example):
 * Add `pytest` unit tests (recommended): volume, density, coordinate inverses, supercell counts, JSON compatibility, etc.
 
 ---
+### Project Layout (after refactor)
+
+```
+igcrystal/
+  __init__.py      # public API exports (Crystal, Atom, factories, constants, utils)
+  constants.py     # AVOGADRO, DEFAULT_MAX_ATOMS, ELEMENT_MASSES
+  utils.py         # helpers like _normalize_element_symbol, extend_element_masses
+  core.py          # Atom, Crystal core logic (volume, density, transforms, supercell, I/O, plotting)
+  factories.py     # convenience constructors (e.g., create_diamond_structure)
+IGCrystal.py       # backward-compatible CLI/demo wrapper
+```
+
+
