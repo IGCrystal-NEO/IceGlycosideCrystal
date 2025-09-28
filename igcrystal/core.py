@@ -1,11 +1,14 @@
 """Core data structures and operations for igcrystal."""
+
 from __future__ import annotations
-from dataclasses import dataclass
-from typing import List, Tuple, Optional, Dict, Any
-import numpy as np
+
 import json
-import math
 import logging
+import math
+from dataclasses import dataclass
+from typing import Any, Dict, List, Optional, Tuple
+
+import numpy as np
 
 from .constants import AVOGADRO, DEFAULT_MAX_ATOMS, ELEMENT_MASSES
 from .utils import _normalize_element_symbol
