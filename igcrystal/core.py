@@ -15,7 +15,7 @@ from .utils import _normalize_element_symbol
 
 # Attempt to import fast neighbor search (optional)
 try:
-    from scipy.spatial import cKDTree  # type: ignore
+    from scipy.spatial import cKDTree
     _HAS_CKDTree = True
 except Exception:
     _HAS_CKDTree = False
@@ -57,6 +57,7 @@ class Crystal:
         self.atoms: List[Atom] = []
         self.space_group: str = "P1"
         # instance mass table (optional). Normalize keys if provided.
+        self.mass_table: Optional[Dict[str, float]]
         if mass_table:
             self.mass_table = { _normalize_element_symbol(k): float(v) for k,v in mass_table.items() }
         else:
