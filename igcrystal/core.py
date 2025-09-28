@@ -60,6 +60,7 @@ class Crystal:
             self.mass_table = None
         # Internal caches for lattice matrices
         self._mat_cache: Optional[np.ndarray] = None
+        self._inv_cache: Optional[np.ndarray] = None
         self._dirty_lattice: bool = True
 
     # -------------------------
@@ -79,6 +80,7 @@ class Crystal:
         # mark cache dirty
         self._dirty_lattice = True
         self._mat_cache = None
+        self._inv_cache = None
 
     def add_atom(self, element: str, x: float, y: float, z: float, occupancy: float = 1.0) -> None:
         """Add an atom with fractional coordinates. occupancy in [0,1]."""
@@ -128,6 +130,11 @@ class Crystal:
         c_vec = np.array([c_x, c_y, c_z])
         mat = np.column_stack((a_vec, b_vec, c_vec))
         self._mat_cache = mat
+        # update inverse cache too
+        try:
+            self._inv_cache = np.linalg.inv(mat)
+        except np.linalg.LinAlgError:
+            self._inv_cache = None
         self._dirty_lattice = False
         return mat
 
@@ -198,10 +205,12 @@ class Crystal:
         mat = self._lattice_vectors()
         vec = np.array(cart, dtype=float)
         try:
-            frac = np.linalg.solve(mat, vec)
+            if self._inv_cache is not None:
+                return self._inv_cache @ vec
+            # fallback solve if inverse not cached
+            return np.linalg.solve(mat, vec)
         except np.linalg.LinAlgError:
             raise ValueError("Lattice vectors matrix is singular or ill-conditioned; cannot solve. Check lattice parameters.")
-        return frac
 
     # -------------------------
     # Supercell and normalization
